@@ -2,8 +2,6 @@ package com.meyhuan.applicationlast;
 
 import android.app.Application;
 
-import com.growingio.android.sdk.collection.Configuration;
-import com.growingio.android.sdk.collection.GrowingIO;
 import com.meyhuan.applicationlast.hook.Hooker;
 
 /**
@@ -28,9 +26,9 @@ public class MyApp extends Application{
             e.printStackTrace();
         }
 
-        GrowingIO.startWithConfiguration(this, new Configuration()
-                .useID()
-                .trackAllFragments()
-                .setChannel("XXX应用商店"));
+//        GrowingIO.startWithConfiguration(this, new Configuration()
+//                .useID()
+//                .trackAllFragments()
+//                .setChannel("XXX应用商店"));
     }
 }
