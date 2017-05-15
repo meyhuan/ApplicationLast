@@ -26,4 +26,9 @@ public class MainActivity extends AppCompatActivity {
 //        VdsAgent
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }

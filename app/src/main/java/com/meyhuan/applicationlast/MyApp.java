@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.growingio.android.sdk.collection.Configuration;
 import com.growingio.android.sdk.collection.GrowingIO;
+import com.meyhuan.applicationlast.hook.Hooker;
 
 /**
  * User  : guanhuan
@@ -12,9 +13,21 @@ import com.growingio.android.sdk.collection.GrowingIO;
 
 public class MyApp extends Application{
 
+    private static MyApp INSTANCE ;
+
+    public static MyApp getInstance() {
+        return INSTANCE;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
+        INSTANCE = this;
+        try {
+            Hooker.hookLayoutInflater();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         GrowingIO.startWithConfiguration(this, new Configuration()
                 .useID()
                 .trackAllFragments()
