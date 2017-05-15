@@ -3,6 +3,7 @@ package com.meyhuan.applicationlast;
 import android.app.Application;
 
 import com.meyhuan.applicationlast.hook.Hooker;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * User  : guanhuan
@@ -19,6 +20,12 @@ public class MyApp extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+
+        MobclickAgent.startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this,
+                "56fa320d67e58ed80200281b", "yy"));
+        MobclickAgent.setDebugMode(BuildConfig.DEBUG);
+        MobclickAgent.setCatchUncaughtExceptions(false);
+
         INSTANCE = this;
         try {
             Hooker.hookLayoutInflater();

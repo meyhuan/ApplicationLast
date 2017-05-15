@@ -1,0 +1,27 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+dependencies {
+    compile gradleApi()//gradle sdk
+    compile localGroovy()//groovy sdk
+    compile "com.android.tools.build:gradle:2.3.1"
+    compile 'org.javassist:javassist:3.20.0-GA'
+    compile 'org.aspectj:aspectjtools:1.8.1'
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: uri('../repo'))
+        pom.groupId = 'com.yy.fe.plugin'
+        pom.artifactId = 'gradleplugin'
+        pom.version = '1.0.0'
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+
+
+//插件修改后运行前需要重新发布: ./gradlew -p buildsrc clean build uploadArchives --info
