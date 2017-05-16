@@ -18,44 +18,47 @@ import java.security.MessageDigest;
  * Date  : 2017/5/3
  */
 
-public class CustomLayoutInflater extends LayoutInflater{
+public class CustomLayoutInflater extends LayoutInflater {
 
-        private static final String[] sClassPrefixList = {
-                "android.widget.",
-                "android.webkit."
-        };
-        public CustomLayoutInflater(Context context) {
-            super(context);
-        }
+    private static final String[] sClassPrefixList = {
+            "android.widget.",
+            "android.webkit."
+    };
 
-        protected CustomLayoutInflater(LayoutInflater original, Context newContext) {
-            super(original, newContext);
-        }
+    public CustomLayoutInflater(Context context) {
+        super(context);
+    }
 
-        @Override protected View onCreateView(String name, AttributeSet attrs) throws ClassNotFoundException {
-            for (String prefix : sClassPrefixList) {
-                try {
-                    View view = createView(name, prefix, attrs);
-                    if (view != null) {
-                        return view;
-                    }
-                } catch (ClassNotFoundException e) {
-                    // In this case we want to let the base class take a crack
-                    // at it.
+    protected CustomLayoutInflater(LayoutInflater original, Context newContext) {
+        super(original, newContext);
+    }
+
+    @Override
+    protected View onCreateView(String name, AttributeSet attrs) throws ClassNotFoundException {
+        for (String prefix : sClassPrefixList) {
+            try {
+                View view = createView(name, prefix, attrs);
+                if (view != null) {
+                    return view;
                 }
+            } catch (ClassNotFoundException e) {
+                // In this case we want to let the base class take a crack
+                // at it.
             }
-            return super.onCreateView(name, attrs);
         }
-        public LayoutInflater cloneInContext(Context newContext) {
-            return new CustomLayoutInflater(this, newContext);
-        }
+        return super.onCreateView(name, attrs);
+    }
+
+    public LayoutInflater cloneInContext(Context newContext) {
+        return new CustomLayoutInflater(this, newContext);
+    }
 
     @Override
     public View inflate(@LayoutRes int resource, @Nullable ViewGroup root, boolean attachToRoot) {
-        View viewGroup =  super.inflate(resource, root, attachToRoot);
+        View viewGroup = super.inflate(resource, root, attachToRoot);
         View rootView = viewGroup;
         View tempView = viewGroup;
-        while (tempView != null){
+        while (tempView != null) {
             rootView = viewGroup;
             tempView = (ViewGroup) tempView.getParent();
         }
@@ -63,34 +66,36 @@ public class CustomLayoutInflater extends LayoutInflater{
         return viewGroup;
     }
 
-    private void traversalViewGroup(View rootView){
-        if(rootView != null && rootView instanceof ViewGroup){
-            if(rootView.getTag() == null){
+    private void traversalViewGroup(View rootView) {
+        if (rootView != null && rootView instanceof ViewGroup) {
+            if (rootView.getTag() == null) {
                 rootView.setTag(getViewTag());
             }
             ViewGroup viewGroup = (ViewGroup) rootView;
             int childCount = viewGroup.getChildCount();
-            for(int i = 0; i < childCount; i++){
+            for (int i = 0; i < childCount; i++) {
                 View childView = viewGroup.getChildAt(i);
-                if(childView.getTag() == null){
+                if (childView.getTag() == null) {
                     childView.setTag(combineTag(getViewTag(), viewGroup.getTag().toString()));
                 }
-                Log.e("Hooker", "childView name = " + childView.getClass().getName() + "id = " + childView.getTag().toString() );
-                if(childView instanceof ViewGroup){
+                Log.e("Hooker", "childView name = " + childView.getClass().getName() + "id = " + childView.getTag().toString());
+                if (childView instanceof ViewGroup) {
                     traversalViewGroup(childView);
                 }
             }
         }
     }
 
-  private String combineTag(String tag1, String tag2){
+    private String combineTag(String tag1, String tag2) {
         return getMD5(getMD5(tag1) + getMD5(tag2));
     }
 
     private static int VIEW_TAG = 0x10000000;
-    private static String getViewTag(){
+
+    private static String getViewTag() {
         return String.valueOf(VIEW_TAG++);
     }
+
     /**
      * 对字符串md5加密
      *
